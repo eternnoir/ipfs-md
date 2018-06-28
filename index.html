@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>IPFS Stie</title>
+
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        #status {
+            font-style: italic;
+        }
+    </style>
+
+    <script src="js/jquery.min.js"></script>
+
+    <!-- Obtain Markdown.Converter.js from http://code.google.com/p/pagedown/ -->
+    <script src="js/Markdown.Converter.js"></script>
+
+    <script>
+        (function($) {
+            $.UrlParam = function(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            }
+        })(jQuery);
+
+        $(document).ready(function() {
+            $("#status").html("<p>Loading page content...</p>");
+            var file = $.UrlParam("md")
+            if (!file) {
+                file = "index.md"
+            }
+            var markdownURL = "md/" + file;
+            $.get(markdownURL, function(markdownContent) {
+                var converter = new Markdown.Converter();
+                var htmlContent = converter.makeHtml(markdownContent);
+                $("div#content").html(htmlContent);
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <div id="content">
+        <div id="status">
+            <p>JavaScript must be enabled in your browser to view this page.</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
